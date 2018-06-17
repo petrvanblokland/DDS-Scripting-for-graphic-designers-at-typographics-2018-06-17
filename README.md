@@ -1,2 +1,2 @@
-# DDS-Scripting-for-graphic-designers-at-typographics-2018-06-17
-Storage of document for the 1-day free workshop Scripting for Graphic Designers during Typographics 2018
+# DDS-Scripting-for-graphic-designers-2018-06-17
+Scripting study for graphic designers
