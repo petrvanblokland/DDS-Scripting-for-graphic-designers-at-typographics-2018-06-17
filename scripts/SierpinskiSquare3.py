@@ -24,3 +24,4 @@ class SierpinskiSquare:
                     
 ssq = SierpinskiSquare()
 ssq.draw(0, 0, 960, 0)
+saveImage('SierpinsikySquare.pdf')

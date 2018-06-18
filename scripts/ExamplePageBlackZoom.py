@@ -23,6 +23,7 @@ for pn in range(Frames):
     # x = Margin left (PM) + padding inside page
     # y = Margin bottom (PM) + height - top padding
     # Calculate the "angle" stepping through 360 degrees by frames
+    # 180 instead of 360 makes 1/2 cycle of zoom
     angle = pn/Frames*180
     # Calculate the sin value of the angle and scale vertical
     # by 50% and move up, so min equals 0 and max equals 1
