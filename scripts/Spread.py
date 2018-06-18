@@ -1,3 +1,4 @@
+import os
 
 A4 = 595, 842
 
@@ -10,28 +11,34 @@ class Image(object):
         self.h = h
         
     def draw(self, page):
-        # Create random image color
-        fill(random(), random(), random())
-        stroke(None) # No frame around image
-        # For now, draw the image as a random color
-        rect(page.padding+self.x, page.padding+self.y, 
-            self.w, self.h )    
+        if os.path.exists(self.path):
+            image(self.path, (self.x, self.y))
+        else:
+            # Create random image color
+            fill(random(), random(), random())
+            stroke(None) # No frame around image
+            # For now, draw the image as a random color
+            rect(page.padding+self.x, page.padding+self.y, 
+                self.w, self.h )    
                  
     
 class Text(object):
     
-    def __init__(self, s):
+    def __init__(self, s, x, y):
         self.s = s
+        self.x = x
+        self.y = y
         
     def draw(self, page):
                 # Headline
         fill(0.8)
         stroke(None)
-        rect(page.padding, page.h-2*page.padding, page.w-2*page.padding, 20 )    
+        rect(page.padding+self.x, page.padding+self.y,
+             page.w-2*page.padding, 20 )    
         fontSize(32)
         font('Verdana')
         fill(0)
-        text(self.s, (page.padding, page.h-2*page.padding))
+        text(self.s, (page.padding+self.x, page.padding+self.y))
          
 class Page(object):
     
@@ -63,9 +70,16 @@ class Page(object):
 # ---------------------------------------------------
 # Application
 
+Gutter = 16
 W, H = A4
 page = Page(W, H, 'MySpread')
-page.elements.append(Text('Hello world and other'))
-page.elements.append(Image('aaa', 0, 300, 50, 50))
+page.elements.append(Image('Type@Cooper.pdf', 0, 0, 330, 608))
+page.elements.append(Text('Hello world and other', 0, 728))
+page.elements.append(Text('Another text', 0, 458))
+page.elements.append(Image('aaa', 0, 536, 516, 174))
 page.elements.append(Image('aaa', 0, 394, 50, 50))
+page.elements.append(Image('aaa', -10, 162, 268, 120))
+page.elements.append(Image('aaa', 246, 248, 50, 50))
 page.draw()
+
+saveImage('SpreadExample.pdf')
