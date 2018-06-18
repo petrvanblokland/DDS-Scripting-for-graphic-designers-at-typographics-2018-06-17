@@ -3,8 +3,6 @@
 
 _Live blog style notes by @davelab6_
 
-[ 11:30  I arrive 90 mins late ]
-
 Petr: So now you have a document design for a PDF to print, but what if you instead want the document to be an animation with a voice-over audio that lays out the document slowly in time and explains why you put things where. Well you need to do it all again in a different 'motion design' application. Now lets jump in to using DrawBot to show how that works in 1 hour. 
 
 I have a design workshop, 6 hours split 50/50, or 6 weeks. Try to do design then coding? Wont work. First week, do it all. Start with a width and weight. Whole thing. Then do it again. Then you can NEVER miss a 'final' presentation, because you are just increasing the level of detail in each week. 
@@ -382,15 +380,13 @@ Here is `AmstelvarBanner.py`, and you see it is a similar amount of code.
 
 Time for lunch! 20 mins
 
-* * * 
-
 [ 13:30 ]
 
-Petr:
+## Classes
 
-Okay, lets review some code examples in the PageBot repo.
+Petr: Okay, lets review some code examples in the PageBot repo.
 
-`SierpinskySquare.py` introduces flow control, with if/else statements, and also recursion. 
+`SierpinskySquare3.py` introduces flow control, with if/else statements, and also recursion. 
 
 We can control STEPS value and see how that changes the whole thing. Since it is exponential, 5 will take longer to calculate. 
 
@@ -402,3 +398,257 @@ You have a lot of design options you would not think of because it is so much wo
 
 I made PageBot open source, and you can find our work today in <https://github.com/petrvanblokland/DDS-Scripting-for-graphic-designers-at-typographics-2018-06-17>
 
+When you use Python, you are using an object orientated language, that is dynamic. Older languages were not OO, and had to be compiled to machine code before they could run. 
+
+In C programming, you write code to do this and that, and the actor is the programmer. In our example with the fractal square, we saw 'classes'. 
+
+This is not exactly like classes in CSS, but has some similarities. 
+
+I want to explain the idea of Object Orientated Programming to you, with the example of physical objects: Automobiles. 
+
+Again I advise you to type with me, but the reference file is `CarWithComments.py` and it is part of the Github repo. 
+
+Say we are dealing with cars. Here is the most simple class we can have:
+
+    class Car():
+      pass
+
+This is a defintion. It is not the same part of the process as where it is being used. So lets add a dividing comment after that
+
+    # ----------------------------------------
+
+Under that, lets use the class we made
+
+    myCar = Car()
+    print(myCar)
+
+And when we run this, we see this output:
+
+    <__main__.Car object at 0x10f8870b8>
+
+The class by itself does nothing. It is a factory generating cars, but does nothing right now. 
+
+**While it is CALLED "Car()", it is not a car itself, it is an object that outputs car objects.**
+
+Each output is called an 'instance.' 
+
+So we could add this comment
+
+    # Factory of Cars --> generates cars (which are Instances)
+
+The fact that the factory is itself an object, means you can have factories of factories. Physical factories that make things are buildings, that are made. 
+
+The 'root' object is a python object `object`; deep inside Python is the thing that is creating factories. 
+
+So, when I buy a car, the first thing I want to do is drive it. That would work like this:
+
+    myCar = Car()
+    myCar.drive
+
+But this errors because the factory did not make cars that can drive. We need to tell the car what to do with that instruction. Lets return the car to the factory and redesign the car making process so it outputs cars that undersatnd what drive means. In python this is done with a `def` to **def**ine the function's functionality. 
+
+    class Car():
+
+      def drive(self):
+        print("I am driving")
+
+    # -----------------
+
+    myCar = Car()
+    myCar.drive
+
+and this now works, and you see "I am driving" in the DrawBot output tray. 
+
+Now we want more from driving, it doesn't just go forwards and that is it. We want to be able to at least say if the amount of driving should be 0 or a positive amount, and probably we need some limit. 
+
+    myCar.drive(0)
+    myCar.drive(30)
+    myCar.drive(100)
+
+What does the `self` do in the definition of `drive`?
+
+    def drive(self, speed):
+      print("I am driving", speed, "m/hr")
+
+Now those 3 drives will work, showing the speed. 
+
+But we can go 45,000,000 miles an hour. Can we limit the speed, so that even if you ask for that speed, you don't get it? Yes. We need a value in the factory's scheme for the max speed.
+
+Again, we add this as an all caps variable before our definition, a convention that tells you something about the variable. My class has an initial cap so you reognise it as a class name, and my methods/functions start with lowercase, and constants, things that do not change, are all caps. 
+
+And then we use the python `min` function to get the minomum value between two values, so that if the speed provided is greater than MAX_SPEED, we get the latter. 
+
+
+    class Car():
+
+      MAX_SPEED = 120
+      def drive(self, speed):
+        print("I am driving", min(speed, self.MAX_SPEED), "m/hour")
+
+    #----------------
+
+    myCar = Car()
+    myCar.drive(500)
+
+you see the output
+
+    I am driving 120 m/hour
+
+But this still works
+
+    myCar.drive(-500)
+
+Maybe that is the car going backwards?
+
+So we need to add a min speed?
+
+```py
+class Car():
+
+      MAX_SPEED = 120
+      MIN_SPEED = -20
+      def drive(self, speed):
+          speed = min(speed, self.MAX_SPEED)
+          speed = max(speed, self.MIN_SPEED)
+          print("I am driving", speed, "m/hour")
+
+#----------------
+
+myCar = Car()
+myCar.drive(500)
+myCar.drive(-500)
+```
+
+Output:
+
+    I am driving 120 m/hour
+    I am driving -20 m/hour
+
+...
+
+Now we can add some defaults to the class. 
+
+```py
+class Car():
+
+    MAX_SPEED = 120
+    MIN_SPEED = -20
+
+    def __init__(self, color):
+        pass
+    
+    def drive(self, speed):
+    # ...
+#-------------
+```
+
+You can override or redefine these class defaults. 
+
+The `__init__` is a special function name provided by Python. 
+
+There is also ``__repr__`` which allows you to set what is returned by an object by default, such as when that object is printed:
+
+``py
+class Car():
+
+    MAX_SPEED = 120
+    MIN_SPEED = -20
+
+    def __repr__(self):
+    	return("I am a happy car")
+
+    def __init__(self, color):
+    	self.color = color # Paint the shell in the given color
+        # TODO add engine, wheels, seat
+        # Here the car is finished and sent to the dealer
+    
+    def drive(self, speed):
+        speed = min(speed, self.MAX_SPEED)
+        speed = max(speed, self.MIN_SPEED)
+        print("I am driving", speed, "m/hour")
+
+#----------------
+
+myCar = Car('Blue')
+print(myCar.color)
+myCar.drive(500)
+myCar.drive(-500)
+print(myCar)
+```
+
+Output:
+
+```
+Blue
+I am driving 120 m/hour
+I am driving -20 m/hour
+I am a happy car
+```
+
+[ Lots of context about Object Orientated Programming history ]
+
+Books are great, but they are heavy and slow to look up information. So knowing what to look up, is powerful, and today I hope you have learned what to look up.
+
+It is nice to have my studio in Delft, and have students join us. Once a month I have type[media students, and 5+ years ago they loved to borrow my books but now they snap a photo and instantly have a PDF from somewhere ;)
+
+When you get a Moleskin notebook, and use it for sketches, and scan them, remember to get it out of the scanner! :) 
+
+I encourage you to sketch on paper. 
+
+I can draw 10 sketches of a website on paper in the time it takes someone to open Adobe Illustrator and make one. Students say that is not fair, but neither the paper sketch or the illustrator drawing is a website either :) 
+
+I use ScanSnap Manager. I have a few sketchbooks so you can take a look at my process :)
+
+...
+
+The following was seen in my Robothon 2018 presentation:
+
+Here is a 1995 Font Bureau Type Specimen from 1995, made with Quark XPress. We have that file, but we can no longer read it; the Quark software is long gone. 
+
+I have Python programs from 1995, and I can still run them, and I can relatively quickly upgrade them to the latest Python 3 version to run in the latest version; either myself, or hire someone to do it. Because it is libre software and plain text data, that everyone can work with. 
+
+So I scanned a page from the printed FB TS book, and drew guidelines, and measured them; its like a revival typeface, tracing outlines scanned in. 
+
+Here is an inbetween stage, and this is the final reproduction. 
+
+Another is `ATFVariableTypeSpecimen.py` and you can see this working with Bungee, and the various kinds of Bungee fonts, in a 1923 specimen layout. I think this is funny :)
+
+...
+
+We decided to move Font Bureau into Type Network, so that we could share the costs of running a foundry between type designers, and share tools, education, clients. 
+
+Neville Brody joined in 2 days ago. My foundry is "Typetr" and I have published several faces there. There is a 'format' for a TypeNetwork foundry, where I can change my color but everythigng else is fixed. So I make my own typeface promotional websites with PageBot. Then I can change everything:
+
+<http://upgrade.typenetwork.com>
+
+The website contents is in MarkDown, there is no CMS, and I can give the MD files to an editor and they can pass them back to me and plug straight into a regenerated versino of the website. 
+
+The GIFs all are linked to PDFs. The same source generates an optimal result for that medium. 
+
+Since PageBot can see what is supported inside the font, the HTML/CSS is generated by PageBot that inspects the font. 
+
+This Noordji Cube animation is also made with a PageBot script. 
+
+Some things are hard to find out, like how to make a 3d cube image animate, but you only find it out once, and then put it in a function, and re-use it. 
+
+[ More pagebot tutorial ]
+
+PageBot was intended to replace InDesign, and today I have almost every element replicated. 
+
+So you now have some ideas of how to program your design. If you work with developers, you maybe can better discuss your ideas with them. And to write your own programs is a life long journey. 
+
+Q: Does it output HTML/CSS?
+
+A: Yes, it is the weakest part of PageBot still. It is a huge front and we need more people to move it forwards. I am not an expert in knowing JS, nor InDesign. If I was, probably I would not make PageBot ;) There are areas that I can show you that export HTML/CSS and right now that was solved with existing tempaltes and we filled them in, instead of generating all the code. 
+
+You can write scripts do make a cover and do the rest in InDesign, or do the cover in Illustrator and typeset the book in PageBot. I am not an InDesign user any more, but I still use applications for specific tasks. 
+
+...
+
+[ more pagebot example on `Spread.py` setting up a page and placing Text and Rect elements on it. 
+
+...
+
+If you have any questions, please contact me at <buro@petr.com>
+
+[ had to leave at 16:00 ]
