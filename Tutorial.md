@@ -548,7 +548,7 @@ The `__init__` is a special function name provided by Python.
 
 There is also ``__repr__`` which allows you to set what is returned by an object by default, such as when that object is printed:
 
-``py
+```py
 class Car():
 
     MAX_SPEED = 120
@@ -589,7 +589,7 @@ I am a happy car
 
 Books are great, but they are heavy and slow to look up information. So knowing what to look up, is powerful, and today I hope you have learned what to look up.
 
-It is nice to have my studio in Delft, and have students join us. Once a month I have type[media students, and 5+ years ago they loved to borrow my books but now they snap a photo and instantly have a PDF from somewhere ;)
+It is nice to have my studio in Delft, and have students join us. Once a month I have type\[media students, and 5+ years ago they loved to borrow my books but now they snap a photo and instantly have a PDF from somewhere ;)
 
 When you get a Moleskin notebook, and use it for sketches, and scan them, remember to get it out of the scanner! :) 
 
